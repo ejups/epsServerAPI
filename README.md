@@ -1,5 +1,4 @@
-# Server-API
-使用易居PGC直播Saas平台的直播管理API管理直播
+epsServerAPI接口说明
 ====
 
 ## 1 创建直播
@@ -102,7 +101,7 @@ status	true	普通参数	string	 	直播状态 1直播中 2直播结束3禁流
 http://test.xxxx.com/video/change-live-status?liveId=&status=2&token=ejutest
 2、生产环境
 http://xxxx.com/video/change-live-status?liveId=&status=2&token=ejutest
-1.2.6 返回参数说明
+### 返回参数说明
  
 名称	是否必须	参数位置	类型	备注
 status	yes	普通参数	int	请求结果状态 1成功 0失败
@@ -162,4 +161,67 @@ PS.
 1006	update failed	500	内部错误
 1000	token error	200	token错误或者为空
 
-## 2 生成点播
+## 3 生成点播
+
+### 功能介绍
+此文档专门介绍点播生成后主动回调客户推送点播url及相关信息（所有客户接入此服务，都遵从此格式进行回调）
+### 请求说明
+请求方式
+POST
+### 请求头说明
+content-type	首播（uid=27 26）	其他
+content-type	www-form	form-data
+### 请求参数说明
+名称	说明	备注
+posturl	 回调客户的地址	由客户提供回调地址，配置在ts_user_video_callbackurl表中，并加入token认证，示例：
+ 
+加密规则为： 获取入参中xml_data的值， 该值为xml格式的字符串 + 固定字符串（leju_chat_v0.1）拼接为一个字符串进行md5进行加密
+例子：
+string
+ '<?xml version="1.0" encoding="utf-8"?><xml><status>4</status><liveid>1663435</liveid><livename>test00001630</livename><vid>0</vid><createtime>1501746757</createtime><author>-</author><title>-</title><duration></duration><content></content><keywords></keywords><detail><detail0><startTime>0</startTime><endTime>0</endTime></detail0></detail><videourl><url0>-</url0></videourl></xml>leju_chat_v0.1' 
+md5（string）
+### 入参	
+#### 未推流 未生成点播
+{
+    "xml_data":  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+
+<status>4</status>  状态固定为4
+<liveid>1663788</liveid> liveId
+<livename>test00002073</livename>  流名称
+<vid>0</vid>
+<createtime>1500529065</createtime> uninx时间戳
+<author>-</author>
+<title>-</title>
+<duration></duration>
+<content></content>
+<keywords></keywords>
+<detail><detail0>
+<startTime>0</startTime>
+<endTime>0</endTime>
+</detail0></detail>
+<videourl><url0>-</url0></videourl>
+}
+备注： status=4是表示未推流 没有生成点播， 是和乐居首播约定固定死的状态
+#### 有推流 点播生成
+{
+<update>1</update> //回调次数
+<liveid>234837</liveid> //liveId
+<status>2</status> //固定状态 2表示成功 4 表示失败
+<livename>20170110161955</livename> //流名称
+<vid>355655</vid>//点播表的id
+<createtime>1494333864</createtime>
+<author>ejutest</author>
+<title>20170110161955<\/title>
+<content></content>
+<keywords></keywords>
+<detail><detail0>
+<startTime>1494333606</startTime>
+<endTime>1494333864</endTime>
+</detail0></detail>
+<videourl><url0>http://videoplay.ejucloud.com\/newcode-EL0000036256--20170509184222.mp4</url0></videourl>//点播地址
+}
+ 
+### 返回值	
+
+json字符串	返回jsson字符串，作为记录可以查询回调结果情况
+
