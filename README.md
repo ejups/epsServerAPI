@@ -183,8 +183,6 @@ md5（string）
 ### 入参	
 #### 未推流 未生成点播
 {
-    "xml_data":  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
-
 <status>4</status>  状态固定为4
 <liveid>1663788</liveid> liveId
 <livename>test00002073</livename>  流名称
@@ -202,6 +200,7 @@ md5（string）
 <videourl><url0>-</url0></videourl>
 }
 备注： status=4是表示未推流 没有生成点播， 是和乐居首播约定固定死的状态
+
 #### 有推流 点播生成
 {
 <update>1</update> //回调次数
