@@ -3,6 +3,7 @@ epsServerAPI接口说明
 
 ## 1 创建直播
 
+直接访问demo http://static.ejudata.com/demo/video_demo/0.3.0/
 ### 功能介绍
 调用本API以创建直播频道
 可以通过参数控制以下功能
